@@ -133,10 +133,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Snow.cpp" />
+    <ClCompile Include="tSnow.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="machine.h" />
-    <ClInclude Include="MachineStates.h" />
+    <ClInclude Include="Particle.h" />
+    <ClInclude Include="Snow.h" />
+    <ClInclude Include="Terrain.h" />
+    <ClInclude Include="tSnow.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

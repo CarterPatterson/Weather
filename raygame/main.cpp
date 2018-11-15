@@ -10,6 +10,9 @@
 ********************************************************************************************/
 
 #include "raylib.h"
+#include "Snow.h"
+#include <vector>
+#include <iostream>
 
 #define SKYGREY  CLITERAL{ 147, 153, 165, 255 }   // Sky Grey
 #define CURRENT_WEATHER_COLOR SKYGREY
@@ -18,8 +21,16 @@ int main()
 {
 	// Initialization
 	//--------------------------------------------------------------------------------------
-	int screenWidth = 800;
-	int screenHeight = 450;
+	int screenWidth = 1000;
+	int screenHeight = 600;
+
+	const unsigned int TEMPMAX = 5000;
+	Particle *snow = new Snow[TEMPMAX];
+	std::vector <Terrain*> terrain;
+
+	for (unsigned int i = 0; i < TEMPMAX; i++) {
+		snow[i].setPos({ (float)(GetRandomValue(0, screenWidth)), (float)(GetRandomValue(-1500, -1)) });
+	}
 
 	InitWindow(screenWidth, screenHeight, "raylib [core] - Weather System");
 
@@ -31,7 +42,12 @@ int main()
 	{
 		// Update
 		//----------------------------------------------------------------------------------
-		// TODO: Update your variables here
+		for (unsigned int i = 0; i < TEMPMAX; i++) {
+			snow[i].fall();
+			terrain.push_back(snow[i].transform());
+		}
+
+		std::cout << "ITERATE\n";
 		//----------------------------------------------------------------------------------
 
 		// Draw
@@ -40,7 +56,13 @@ int main()
 
 		ClearBackground(CURRENT_WEATHER_COLOR);
 
-		
+		for (unsigned int i = 0; i < TEMPMAX; i++) {
+			snow[i].draw();
+		}
+
+		for (unsigned int i = 0; i < terrain.size(); i++) {
+			terrain.at(i)->draw();
+		}
 
 		EndDrawing();
 		//----------------------------------------------------------------------------------

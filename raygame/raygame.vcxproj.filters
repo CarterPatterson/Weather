@@ -18,12 +18,24 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Snow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tSnow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="machine.h">
+    <ClInclude Include="Particle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MachineStates.h">
+    <ClInclude Include="Snow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Terrain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tSnow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
