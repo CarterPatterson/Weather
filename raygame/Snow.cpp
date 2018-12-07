@@ -2,6 +2,7 @@
 
 Snow::Snow()
 {
+	position = {1, -1};
 	velocity = (GetRandomValue(50, 75))*.01;
 }
 
@@ -12,8 +13,11 @@ Snow::~Snow()
 
 void Snow::draw()
 {
-	if(!isFree)
-		DrawRectangleV(position, {3,3}, WHITE);
+	if (!isFree && position.y > 0) {
+		DrawRectangleV(position, { 2,2 }, WHITE);
+		//DrawPixelV(position, WHITE);
+	}
+		
 }
 
 void Snow::fall()
@@ -27,10 +31,23 @@ void Snow::setPos(Vector2 _position)
 	position = _position;
 }
 
-Terrain * Snow::transform()
-{
-	if (position.y >= GetScreenHeight()) {
-		Terrain *t = new tSnow(position);
-		return t;
+Vector2 Snow::getPos() {
+	return position;
+}
+
+void Snow::setVel(float _velocity) {
+	velocity = _velocity;
+}
+
+float Snow::getVel() {
+	return velocity;
+}
+
+bool Snow::shouldStop(int height) {
+	if (velocity > 0.00f) {
+		if (position.y >= height) {
+			return true;
+		}
 	}
+	return false;
 }

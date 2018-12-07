@@ -13,6 +13,8 @@
 #include "Snow.h"
 #include <vector>
 #include <iostream>
+#include <random>
+#include <time.h>
 
 #define SKYGREY  CLITERAL{ 147, 153, 165, 255 }   // Sky Grey
 #define CURRENT_WEATHER_COLOR SKYGREY
@@ -21,20 +23,31 @@ int main()
 {
 	// Initialization
 	//--------------------------------------------------------------------------------------
-	int screenWidth = 1000;
-	int screenHeight = 600;
+	srand(time(NULL));
 
-	const unsigned int TEMPMAX = 5000;
-	Particle *snow = new Snow[TEMPMAX];
-	std::vector <Terrain*> terrain;
+	const int screenWidth = 1000;
+	const int screenHeight = 600;
+
+	const unsigned int TEMPMAX = 10000;
+	std::vector <Particle*> particles(TEMPMAX);
+	//int* heightMap = new int[screenWidth];
+	int heightMap[screenWidth + 2];
+
+	for (size_t i = 0; i < screenWidth + 2; i++) {
+		heightMap[i] = screenHeight - 1;
+	}
+
+	heightMap[0] = 0;
+	heightMap[screenWidth + 1] = 0;
 
 	for (unsigned int i = 0; i < TEMPMAX; i++) {
-		snow[i].setPos({ (float)(GetRandomValue(0, screenWidth)), (float)(GetRandomValue(-1500, -1)) });
+		particles[i] = new Snow;
+		particles[i]->position = { (float)GetRandomValue(1, screenWidth), (float)GetRandomValue(-1500, -1) };
 	}
 
 	InitWindow(screenWidth, screenHeight, "raylib [core] - Weather System");
 
-	SetTargetFPS(60);
+	SetTargetFPS(60*10);
 	//--------------------------------------------------------------------------------------
 
 	// Main game loop
@@ -42,12 +55,28 @@ int main()
 	{
 		// Update
 		//----------------------------------------------------------------------------------
-		for (unsigned int i = 0; i < TEMPMAX; i++) {
-			snow[i].fall();
-			terrain.push_back(snow[i].transform());
-		}
+		for (unsigned int i = 0; i < particles.size(); i++) {
+			particles[i]->fall();
+			int xIndex = (int)particles[i]->position.x;
+			if (particles[i]->shouldStop(heightMap[xIndex])) {
+				if (heightMap[xIndex - 1] > heightMap[xIndex]) {
+					particles[i]->position.x--;
+					for (size_t j = particles[i]->position.y; j < heightMap[xIndex - 1]; j++) {
+						particles[i]->fall();
+					}
+					continue;
+				} else if (heightMap[xIndex + 1] > heightMap[xIndex]) {
+					particles[i]->position.x++;
+					for (size_t j = particles[i]->position.y; j < heightMap[xIndex + 1]; j++) {
+						particles[i]->fall();
+					}
+					continue;
+				}
+				particles[i]->setVel(0.0f);
+				heightMap[xIndex]--;
+				}
+			}
 
-		std::cout << "ITERATE\n";
 		//----------------------------------------------------------------------------------
 
 		// Draw
@@ -56,13 +85,11 @@ int main()
 
 		ClearBackground(CURRENT_WEATHER_COLOR);
 
-		for (unsigned int i = 0; i < TEMPMAX; i++) {
-			snow[i].draw();
+		for (unsigned int i = 0; i < particles.size(); i++) {
+			particles[i]->draw();
 		}
 
-		for (unsigned int i = 0; i < terrain.size(); i++) {
-			terrain.at(i)->draw();
-		}
+		DrawFPS(100, 100);
 
 		EndDrawing();
 		//----------------------------------------------------------------------------------
