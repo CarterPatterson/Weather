@@ -3,7 +3,8 @@
 Snow::Snow()
 {
 	position = {1, -1};
-	velocity = (GetRandomValue(50, 75))*.01;
+	//velocity = (GetRandomValue(50, 75))*.01;
+	velocity = (GetRandomValue(200, 250))*.01;
 }
 
 
